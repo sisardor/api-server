@@ -11,9 +11,20 @@ var https = require('https');
 var sslConfig = require('./ssl-config');
 
 var app = module.exports = loopback();
-
+var bootOptions = {
+  'appRootDir': __dirname,
+  // Required for issue/96
+  'bootScripts': [
+     './samples/users.js',
+    // './samples/commonfields.js',
+    // './samples/entitytypes.js',
+    // './samples/customfields.js',
+    // './samples/fieldsets.js',
+    // './samples/entities.js'
+  ]
+}
 // boot scripts mount components like REST API
-boot(app, __dirname);
+boot(app, bootOptions);
 
 app.start = function(httpOnly) {
   if (httpOnly === undefined) {
