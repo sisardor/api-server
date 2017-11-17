@@ -2,7 +2,7 @@ var bunyan = require('bunyan');
 var logger = bunyan.createLogger({name: 'users.js'});
 
 module.exports = function (app, cb) {
-  var User = app.models.User
+  var User = app.models.user
   var Role = app.models.Role
   const userData = [
     {username: 'sardor', firstName: 'Sardor', lastName: 'Isakov', avatar: 'https://s.gravatar.com/avatar/ac6144a2418ba3d7e3f199e5910abcda?s=80',

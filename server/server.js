@@ -5,12 +5,23 @@
 
 var loopback = require('loopback');
 var boot = require('loopback-boot');
-
+var bodyParser = require('body-parser');
 var http = require('http');
+var path = require('path');
 var https = require('https');
 var sslConfig = require('./ssl-config');
 
 var app = module.exports = loopback();
+
+// configure view handler
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// configure body parser
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(loopback.token());
+
 var bootOptions = {
   'appRootDir': __dirname,
   // Required for issue/96
@@ -24,8 +35,6 @@ var bootOptions = {
   ]
 }
 // boot scripts mount components like REST API
-boot(app, bootOptions);
-
 app.start = function(httpOnly) {
   if (httpOnly === undefined) {
     httpOnly = process.env.HTTP;
@@ -52,7 +61,11 @@ app.start = function(httpOnly) {
   return server;
 };
 
-// start the server if `$ node server.js`
-if (require.main === module) {
-  app.start();
-}
+boot(app, bootOptions, function (err) {
+  if (err) throw err;
+
+  // start the server if `$ node server.js`
+  if (require.main === module) {
+    app.start();
+  }
+});
