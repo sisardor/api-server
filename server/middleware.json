@@ -12,6 +12,16 @@
       }
     },
     "helmet#xssFilter": {},
+    "helmet#contentSecurityPolicy": {
+      "params": {
+        "setAllHeaders": false,
+        "directives": {
+          "defaultSrc": ["'self'", "localhost"],
+          "styleSrc": ["'unsafe-inline'", "'self'", "https://*.bootstrapcdn.com"],
+          "fontSrc": [ "'self'", "https://*.bootstrapcdn.com"]
+        }
+      }
+    },
     "helmet#frameguard": {
       "params": [
         "deny"
@@ -19,8 +29,9 @@
     },
     "helmet#hsts": {
       "params": {
-        "maxAge": 0,
-        "includeSubdomains": true
+        "maxAge": 31556926,
+        "includeSubdomains": true,
+        "preload": true
       }
     },
     "helmet#hidePoweredBy": {},
