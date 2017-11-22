@@ -13,6 +13,20 @@
       "principalId": "$everyone",
       "accessType": "READ",
       "permission": "ALLOW"
+    },
+    {
+      "principalType": "ROLE",
+      "property": "customCreate",
+      "principalId": "$everyone",
+      "accessType": "EXECUTE",
+      "permission": "ALLOW"
+    },
+    {
+      "principalType": "ROLE",
+      "property": "customCreateTest",
+      "principalId": "$everyone",
+      "accessType": "EXECUTE",
+      "permission": "ALLOW"
     }
   ],
   "methods": []
