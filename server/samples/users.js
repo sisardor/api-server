@@ -6,7 +6,7 @@ module.exports = function (app, cb) {
   var Role = app.models.Role
   const userData = [
     {username: 'sardor', firstName: 'Sardor', lastName: 'Isakov', avatar: 'https://s.gravatar.com/avatar/ac6144a2418ba3d7e3f199e5910abcda?s=80',
-    email: 'sisakov@hydraulx.com', password: 'password'}
+    email: 'sisakov@hydraulx.com', password: 'ASD123qwe$', confirm_password: 'ASD123qwe$'}
   ]
 
   User.count({}, function(err, count) {

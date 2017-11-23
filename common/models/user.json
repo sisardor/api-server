@@ -2,7 +2,18 @@
   "name": "user",
   "base": "User",
   "idInjection": true,
-  "properties": {},
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "password": {
+      "type": "string",
+      "required": true,
+      "pattern": "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[-=!$%#@&*?])(?!.*\\s).{8,16}$",
+      "min": 8,
+      "max": 16
+    }
+  },
   "restrictResetPasswordTokenScope": true,
   "emailVerificationRequired": true,
   "validations": [],

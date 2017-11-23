@@ -7,8 +7,9 @@ var config = require('../../server/config.json');
 var path = require('path');
 var Recaptcha = require('express-recaptcha');
 var recaptcha = new Recaptcha('6LdM3zkUAAAAAJ3MkNFmbXPcVg47p_t-Yv8lW5I2', '6LdM3zkUAAAAAL1d8fzWMiEoSBA7iwFgxIc-2Fmp');
-
+var g = require('loopback/lib/globalize');
 var param = "g-recaptcha-response"
+
 module.exports = function(user) {
   user.remoteMethod('customCreateTest', {
     description: [
@@ -37,6 +38,28 @@ module.exports = function(user) {
   })
   user.disableRemoteMethodByName('create')
   user.validatesPresenceOf('email');
+
+  user.validatePassword = function(plain) {
+    var err,
+        passwordProperties = user.definition.properties.password;
+
+    if (plain.length > passwordProperties.max) {
+      err = new Error (g.f('Password too long: %s (maximum %d symbols)', plain, passwordProperties.max));
+      err.code = 'PASSWORD_TOO_LONG';
+    } else if (plain.length < passwordProperties.min) {
+      err = new Error(g.f('Password too short: %s (minimum %d symbols)', plain, passwordProperties.min));
+      err.code = 'PASSWORD_TOO_SHORT';
+    } else if(!(new RegExp(passwordProperties.pattern, 'g').test(plain))) {
+      err =  new Error(g.f('Invalid password: (must include at least 1 upper case letter, \
+        1 lower case letter, 1 numeric digit and special character.)'));
+      err.code = 'INVALID_PASSWORD';
+    } else {
+      return true;
+    }
+    err.statusCode = 422;
+    throw err;
+  };
+
   user.customCreate = function (data, ctx, callback) {
     try {
       if (!data.hasOwnProperty(param) || data[param] === undefined ||
@@ -79,7 +102,14 @@ module.exports = function(user) {
     });
   }
   user.customCreateTest = function (data, ctx, callback) {
-
+    if (data.hasOwnProperty('password') && data.hasOwnProperty('confirm_password')) {
+      if (data.password !== data.confirm_password) {
+        var err =  new Error(g.f('Invalid password: (password does not match.)'));
+        err.code = 'INVALID_PASSWORD';
+        err.statusCode = 422;
+        return callback(err)
+      }
+    }
 
     var userModel = new user(data)
     // userModel.isValid(function (valid) {
