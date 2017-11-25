@@ -19,7 +19,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 // configure body parser
 app.use(bodyParser.urlencoded({extended: true}));
-
+// parse application/json
+app.use(bodyParser.json())
 
 app.use(loopback.token());
 
